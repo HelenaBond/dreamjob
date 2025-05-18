@@ -1,6 +1,6 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:insert="fragments/header :: header"></head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: header"></head>
 <body>
 <div class="container">
     <div class="row">
@@ -36,6 +36,6 @@
         </table>
     </div>
 </div>
-<footer th:insert="fragments/footer :: footer"></footer>
+<footer th:include="fragments/footer :: footer"></footer>
 </body>
 </html>
