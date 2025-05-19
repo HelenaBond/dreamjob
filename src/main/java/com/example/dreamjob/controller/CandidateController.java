@@ -21,6 +21,6 @@ public class CandidateController {
 
     @GetMapping("/create")
     public String create() {
-        return "candidates/create.html";
+        return "candidates/create";
     }
 }
