@@ -2,6 +2,7 @@ package com.example.dreamjob.repository;
 
 import com.example.dreamjob.model.Vacancy;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,18 @@ public class MemoryVacancyRepository implements VacancyRepository {
     private final Map<Integer, Vacancy> vacancies = new HashMap<>();
 
     private MemoryVacancyRepository() {
-        save(new Vacancy(0, "Intern Java Developer"));
-        save(new Vacancy(0, "Junior Java Developer"));
-        save(new Vacancy(0, "Junior+ Java Developer"));
-        save(new Vacancy(0, "Middle Java Developer"));
-        save(new Vacancy(0, "Middle+ Java Developer"));
-        save(new Vacancy(0, "Senior Java Developer"));
+        save(new Vacancy(0,
+                "Intern Java Developer", "Java Core", null));
+        save(new Vacancy(0,
+                "Junior Java Developer", "Java Core, SQL", null));
+        save(new Vacancy(0,
+                "Junior+ Java Developer", "Java Core, SQL, JPA", null));
+        save(new Vacancy(0,
+                "Middle Java Developer", "Java Core, SQL, Hibernate, Concurrency", null));
+        save(new Vacancy(0,
+                "Middle+ Java Developer", "Java, SQL, Hibernate, Redis", null));
+        save(new Vacancy(0,
+                "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", null));
     }
 
     public static MemoryVacancyRepository getInstance() {
@@ -31,6 +38,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
     @Override
     public Vacancy save(Vacancy vacancy) {
         vacancy.setId(nextId++);
+        vacancy.setCreationDate(LocalDateTime.now().withNano(0));
         vacancies.put(vacancy.getId(), vacancy);
         return vacancy;
     }
@@ -43,7 +51,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
     @Override
     public boolean update(Vacancy vacancy) {
         return vacancies.computeIfPresent(vacancy.getId(),
-                (id, oldVacancy) -> new Vacancy(oldVacancy.getId(), vacancy.getTitle())) != null;
+                (id, oldVacancy) -> vacancy) != null;
     }
 
     @Override

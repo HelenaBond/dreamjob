@@ -15,6 +15,8 @@
             <tr th:each="vacancy: ${vacancies}">
                 <td th:text="${vacancy.id}" />
                 <td th:text="${vacancy.title}" />
+                <td th:text="${vacancy.description}" />
+                <td th:text="${vacancy.creationDate}" />
             </tr>
             </tbody>
         </table>
