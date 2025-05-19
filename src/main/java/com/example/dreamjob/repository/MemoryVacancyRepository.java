@@ -38,7 +38,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
     @Override
     public Vacancy save(Vacancy vacancy) {
         vacancy.setId(nextId++);
-        vacancy.setCreationDate(LocalDateTime.now().withNano(0));
+        vacancy.setCreationDate(LocalDateTime.now());
         vacancies.put(vacancy.getId(), vacancy);
         return vacancy;
     }
