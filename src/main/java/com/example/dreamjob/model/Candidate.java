@@ -56,11 +56,11 @@ public class Candidate {
         if (!(object instanceof Candidate candidate)) {
             return false;
         }
-        return Objects.equals(name, candidate.name) && Objects.equals(description, candidate.description) && Objects.equals(creationDate, candidate.creationDate);
+        return id == candidate.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, creationDate);
+        return Objects.hash(id);
     }
 }

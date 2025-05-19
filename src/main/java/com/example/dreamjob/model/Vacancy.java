@@ -60,12 +60,12 @@ public class Vacancy {
         if (!(object instanceof Vacancy vacancy)) {
             return false;
         }
-        return Objects.equals(title, vacancy.title) && Objects.equals(description, vacancy.description);
+        return id == vacancy.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description);
+        return Objects.hash(id);
     }
 }
 
