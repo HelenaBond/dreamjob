@@ -29,7 +29,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
         save(new Vacancy(0,
                 "Middle+ Java Developer", "Java, SQL, Hibernate, Redis", now));
         save(new Vacancy(0,
-                "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", null));
+                "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", now));
     }
 
     public static MemoryVacancyRepository getInstance() {
