@@ -1,6 +1,7 @@
 package com.example.dreamjob.repository;
 
 import com.example.dreamjob.model.Vacancy;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -8,15 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class MemoryVacancyRepository implements VacancyRepository {
-
-    private static final MemoryVacancyRepository INSTANCE = new MemoryVacancyRepository();
 
     private int nextId = 1;
 
     private final Map<Integer, Vacancy> vacancies = new HashMap<>();
 
-    private MemoryVacancyRepository() {
+    public MemoryVacancyRepository() {
         LocalDateTime now = LocalDateTime.now().withNano(0);
         save(new Vacancy(0,
                 "Intern Java Developer", "Java Core", now));
@@ -30,10 +30,6 @@ public class MemoryVacancyRepository implements VacancyRepository {
                 "Middle+ Java Developer", "Java, SQL, Hibernate, Redis", now));
         save(new Vacancy(0,
                 "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", now));
-    }
-
-    public static MemoryVacancyRepository getInstance() {
-        return INSTANCE;
     }
 
     @Override

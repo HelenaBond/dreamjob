@@ -2,47 +2,42 @@ package com.example.dreamjob.service;
 
 import com.example.dreamjob.model.Candidate;
 import com.example.dreamjob.repository.CandidateRepository;
-import com.example.dreamjob.repository.MemoryCandidateRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class SimpleCandidateService implements CandidateService {
 
-    private static final CandidateService INSTANCE = new SimpleCandidateService();
+    private final CandidateRepository candidateRepository;
 
-    private final CandidateRepository repository = MemoryCandidateRepository.getInstance();
-
-    private SimpleCandidateService() {
-
-    }
-
-    public static CandidateService getInstance() {
-        return INSTANCE;
+    public SimpleCandidateService(CandidateRepository candidateRepository) {
+        this.candidateRepository = candidateRepository;
     }
 
     @Override
     public Candidate save(Candidate candidate) {
-        return repository.save(candidate);
+        return candidateRepository.save(candidate);
     }
 
     @Override
     public boolean deleteById(int id) {
-        return repository.deleteById(id);
+        return candidateRepository.deleteById(id);
     }
 
     @Override
     public boolean update(Candidate candidate) {
-        return repository.update(candidate);
+        return candidateRepository.update(candidate);
     }
 
     @Override
     public Optional<Candidate> findById(int id) {
-        return repository.findById(id);
+        return candidateRepository.findById(id);
     }
 
     @Override
     public Collection<Candidate> findAll() {
-        return repository.findAll();
+        return candidateRepository.findAll();
     }
 }
