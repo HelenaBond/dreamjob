@@ -6,8 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 @Controller
 @RequestMapping("/candidates")
+@ThreadSafe
 public class CandidateController {
 
     private final CandidateService candidateService;

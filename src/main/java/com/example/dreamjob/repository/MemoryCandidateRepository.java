@@ -3,18 +3,21 @@ package com.example.dreamjob.repository;
 import com.example.dreamjob.model.Candidate;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@ThreadSafe
 @Repository
 public class MemoryCandidateRepository implements CandidateRepository {
 
-    private int nextId = 1;
+    private final AtomicInteger nextId = new AtomicInteger(1);
 
-    private final Map<Integer, Candidate> candidates = new HashMap<>();
+    private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
     public MemoryCandidateRepository() {
         LocalDateTime now = LocalDateTime.now().withNano(0);
@@ -28,7 +31,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     @Override
     public Candidate save(Candidate candidate) {
-        candidate.setId(nextId++);
+        candidate.setId(nextId.incrementAndGet());
         candidates.put(candidate.getId(), candidate);
         return candidate;
     }
