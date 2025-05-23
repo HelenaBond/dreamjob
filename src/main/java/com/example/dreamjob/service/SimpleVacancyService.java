@@ -1,13 +1,13 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
+import com.example.dreamjob.exception.VacancyNotFoundException;
 import com.example.dreamjob.model.Vacancy;
 import com.example.dreamjob.repository.VacancyRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collection;
-import java.util.Optional;
 
 @ThreadSafe
 @Service
@@ -24,38 +24,49 @@ public class SimpleVacancyService implements VacancyService {
 
     @Override
     public Vacancy save(Vacancy vacancy, FileDto image) {
-        saveNewFile(vacancy, image);
+        var file = fileService.save(image);
+        vacancy.setFileId(file.getId());
         return vacancyRepository.save(vacancy);
     }
 
-    private void saveNewFile(Vacancy vacancy, FileDto image) {
-        var file = fileService.save(image);
-        vacancy.setFileId(file.getId());
+    @Override
+    public void deleteById(int vacancyId) {
+        Vacancy vacancy = findById(vacancyId);
+        fileService.deleteById(vacancy.getFileId());
+        vacancyRepository.deleteById(vacancyId);
     }
 
     @Override
-    public boolean deleteById(int id) {
-        fileService.deleteById(id);
-        return vacancyRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean update(Vacancy vacancy, FileDto image) {
-        var isNewFileEmpty = image.getContent().length == 0;
-        if (isNewFileEmpty) {
-            return vacancyRepository.update(vacancy);
+    public void update(Vacancy vacancy, FileDto image) {
+        existsById(vacancy.getId()); /* предпроверка */
+        if (image.getContent().length != 0) {
+            var file = fileService.save(image);
+            var oldFileId = vacancy.getFileId();
+            fileService.deleteById(oldFileId);
+            vacancy.setFileId(file.getId());
         }
-        /* если передан новый не пустой файл, то старый удаляем, а новый сохраняем */
-        var oldFileId = vacancy.getFileId();
-        saveNewFile(vacancy, image);
-        var isUpdated = vacancyRepository.update(vacancy);
-        fileService.deleteById(oldFileId);
-        return isUpdated;
+        boolean isSaved = vacancyRepository.update(vacancy);
+        if (!isSaved) { /* компенсация */
+            fileService.deleteById(vacancy.getFileId());
+        }
     }
 
     @Override
-    public Optional<Vacancy> findById(int id) {
-        return vacancyRepository.findById(id);
+    public Vacancy findById(int id) {
+        return vacancyRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new VacancyNotFoundException(
+                                "Вакансия с указанным идентификатором не найдена"));
+    }
+
+    @Override
+    public void existsById(int id) {
+        boolean result = vacancyRepository.existsById(id);
+        if (!result) {
+            throw new VacancyNotFoundException(
+                    "Вакансия с указанным идентификатором не найдена");
+        }
     }
 
     @Override
