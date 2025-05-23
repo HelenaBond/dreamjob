@@ -37,8 +37,8 @@ public class MemoryCandidateRepository implements CandidateRepository {
     }
 
     @Override
-    public boolean deleteById(int id) {
-        return candidates.remove(id) != null;
+    public void deleteById(int id) {
+        candidates.remove(id);
     }
 
     @Override
@@ -57,6 +57,11 @@ public class MemoryCandidateRepository implements CandidateRepository {
     @Override
     public Optional<Candidate> findById(int id) {
         return Optional.ofNullable(candidates.get(id));
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return candidates.containsKey(id);
     }
 
     @Override

@@ -4,16 +4,17 @@ import com.example.dreamjob.dto.FileDto;
 import com.example.dreamjob.model.Candidate;
 
 import java.util.Collection;
-import java.util.Optional;
 
 public interface CandidateService {
     Candidate save(Candidate candidate, FileDto image);
 
-    boolean deleteById(int id);
+    void deleteById(int candidateId);
 
-    boolean update(Candidate candidate, FileDto image);
+    void update(Candidate candidate, FileDto image);
 
-    Optional<Candidate> findById(int id);
+    Candidate findById(int id);
+
+    void existsById(int id);
 
     Collection<Candidate> findAll();
 }

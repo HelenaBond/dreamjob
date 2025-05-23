@@ -49,7 +49,7 @@ public class SimpleFileService implements FileService {
         try {
             Files.write(Path.of(path), content);
         } catch (IOException e) {
-            throw new RuntimeException("Файл не был сохранён.", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -84,7 +84,7 @@ public class SimpleFileService implements FileService {
         try {
             Files.deleteIfExists(Path.of(path));
         } catch (IOException e) {
-            throw new RuntimeException("Файл не был удалён.", e);
+            throw new RuntimeException(e);
         }
     }
 }

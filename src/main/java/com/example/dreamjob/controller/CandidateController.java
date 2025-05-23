@@ -50,24 +50,21 @@ public class CandidateController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
-        var candidateOptional = candidateService.findById(id);
-        if (candidateOptional.isEmpty()) {
-            model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+        try {
+            var candidate = candidateService.findById(id);
+            model.addAttribute("cities", cityService.findAll());
+            model.addAttribute("candidate", candidate);
+            return "candidates/one";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
             return "errors/404";
         }
-        model.addAttribute("cities", cityService.findAll());
-        model.addAttribute("candidate", candidateOptional.get());
-        return "candidates/one";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
         try {
-            var isUpdated = candidateService.update(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
-            if (!isUpdated) {
-                model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
-                return "errors/404";
-            }
+            candidateService.update(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
             return "redirect:/candidates";
         }  catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
@@ -77,11 +74,12 @@ public class CandidateController {
 
     @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id) {
-        var isDeleted = candidateService.deleteById(id);
-        if (!isDeleted) {
-            model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
+        try {
+            candidateService.deleteById(id);
+            return "redirect:/candidates";
+        }  catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
             return "errors/404";
         }
-        return "redirect:/candidates";
     }
 }
