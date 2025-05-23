@@ -22,17 +22,17 @@ public class MemoryVacancyRepository implements VacancyRepository {
     public MemoryVacancyRepository() {
         LocalDateTime now = LocalDateTime.now().withNano(0);
         save(new Vacancy(0,
-                "Intern Java Developer", "Java Core", now, false, 1));
+                "Intern Java Developer", "Java Core", now, false, 1, 0));
         save(new Vacancy(0,
-                "Junior Java Developer", "Java Core, SQL", now, false, 1));
+                "Junior Java Developer", "Java Core, SQL", now, false, 1, 0));
         save(new Vacancy(0,
-                "Junior+ Java Developer", "Java Core, SQL, JPA", now, false, 2));
+                "Junior+ Java Developer", "Java Core, SQL, JPA", now, false, 2, 0));
         save(new Vacancy(0,
-                "Middle Java Developer", "Java Core, SQL, Hibernate, Concurrency", now, false, 2));
+                "Middle Java Developer", "Java Core, SQL, Hibernate, Concurrency", now, false, 2, 0));
         save(new Vacancy(0,
-                "Middle+ Java Developer", "Java, SQL, Hibernate, Redis", now, false, 3));
+                "Middle+ Java Developer", "Java, SQL, Hibernate, Redis", now, false, 3, 0));
         save(new Vacancy(0,
-                "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", now, false, 3));
+                "Senior Java Developer", "Java, SQL, Hibernate, Redis, Kafka", now, false, 3, 0));
     }
 
     @Override
@@ -56,7 +56,8 @@ public class MemoryVacancyRepository implements VacancyRepository {
                         vacancy.getDescription(),
                         vacancy.getCreationDate(),
                         vacancy.getVisible(),
-                        vacancy.getCityId()
+                        vacancy.getCityId(),
+                        vacancy.getFileId()
                 )) != null;
     }
 
