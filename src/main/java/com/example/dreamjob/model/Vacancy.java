@@ -11,7 +11,7 @@ public class Vacancy {
 
     private String description;
 
-    private LocalDateTime creationDate = LocalDateTime.now();
+    private final LocalDateTime creationDate;
 
     private boolean visible;
 
@@ -20,6 +20,7 @@ public class Vacancy {
     private int fileId;
 
     public Vacancy() {
+        creationDate = LocalDateTime.now();
     }
 
     public Vacancy(
@@ -66,10 +67,6 @@ public class Vacancy {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
     }
 
     public boolean getVisible() {
