@@ -1,8 +1,10 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
+import com.example.dreamjob.exception.StorageException;
 import com.example.dreamjob.model.File;
 import com.example.dreamjob.repository.FileRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class SimpleFileService implements FileService {
 
@@ -49,7 +52,9 @@ public class SimpleFileService implements FileService {
         try {
             Files.write(Path.of(path), content);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String message = "Файл не был сохранён";
+            log.error(message, e);
+            throw new StorageException(message);
         }
     }
 
@@ -67,7 +72,9 @@ public class SimpleFileService implements FileService {
         try {
             return Files.readAllBytes(Path.of(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String message = "Файл не может быть прочитан";
+            log.error(message, e);
+            throw new StorageException(message);
         }
     }
 
@@ -84,7 +91,9 @@ public class SimpleFileService implements FileService {
         try {
             Files.deleteIfExists(Path.of(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            String message = "Файл не был удалён";
+            log.error(message, e);
+            throw new StorageException(message);
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
-import com.example.dreamjob.exception.CandidateNotFoundException;
+import com.example.dreamjob.exception.DatabaseUpdateException;
+import com.example.dreamjob.exception.EntityNotFoundException;
 import com.example.dreamjob.model.Candidate;
 import com.example.dreamjob.model.File;
 import com.example.dreamjob.repository.CandidateRepository;
@@ -49,6 +50,7 @@ public class SimpleCandidateService implements CandidateService {
         boolean isSaved = candidateRepository.update(candidate);
         if (!isSaved) { /* компенсация */
             fileService.deleteById(candidate.getFileId());
+            throw new DatabaseUpdateException("Не удалось обновить кандидата");
         }
     }
 
@@ -57,7 +59,7 @@ public class SimpleCandidateService implements CandidateService {
         return candidateRepository
                 .findById(id)
                 .orElseThrow(
-                        () -> new CandidateNotFoundException(
+                        () -> new EntityNotFoundException(
                                 "Кандидат с указанным идентификатором не найден"));
     }
 
@@ -65,7 +67,7 @@ public class SimpleCandidateService implements CandidateService {
     public void existsById(int id) {
         boolean result = candidateRepository.existsById(id);
         if (!result) {
-            throw new CandidateNotFoundException(
+            throw new EntityNotFoundException(
                     "Кандидат с указанным идентификатором не найден");
         }
     }

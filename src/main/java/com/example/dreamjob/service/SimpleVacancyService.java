@@ -1,7 +1,8 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
-import com.example.dreamjob.exception.VacancyNotFoundException;
+import com.example.dreamjob.exception.DatabaseUpdateException;
+import com.example.dreamjob.exception.EntityNotFoundException;
 import com.example.dreamjob.model.Vacancy;
 import com.example.dreamjob.repository.VacancyRepository;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,7 @@ public class SimpleVacancyService implements VacancyService {
         boolean isSaved = vacancyRepository.update(vacancy);
         if (!isSaved) { /* компенсация */
             fileService.deleteById(vacancy.getFileId());
+            throw new DatabaseUpdateException("Не удалось обновить вакансию");
         }
     }
 
@@ -56,7 +58,7 @@ public class SimpleVacancyService implements VacancyService {
         return vacancyRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new VacancyNotFoundException(
+                        new EntityNotFoundException(
                                 "Вакансия с указанным идентификатором не найдена"));
     }
 
@@ -64,7 +66,7 @@ public class SimpleVacancyService implements VacancyService {
     public void existsById(int id) {
         boolean result = vacancyRepository.existsById(id);
         if (!result) {
-            throw new VacancyNotFoundException(
+            throw new EntityNotFoundException(
                     "Вакансия с указанным идентификатором не найдена");
         }
     }
