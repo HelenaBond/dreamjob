@@ -9,6 +9,7 @@ import com.example.dreamjob.repository.CandidateRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @ThreadSafe
@@ -28,6 +29,7 @@ public class SimpleCandidateService implements CandidateService {
     public Candidate save(Candidate candidate, FileDto image) {
         File file = fileService.save(image);
         candidate.setFileId(file.getId());
+        candidate.setCreationDate(LocalDateTime.now());
         return candidateRepository.save(candidate);
     }
 

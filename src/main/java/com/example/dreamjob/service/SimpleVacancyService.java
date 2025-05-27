@@ -8,6 +8,7 @@ import com.example.dreamjob.repository.VacancyRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @ThreadSafe
@@ -27,6 +28,7 @@ public class SimpleVacancyService implements VacancyService {
     public Vacancy save(Vacancy vacancy, FileDto image) {
         var file = fileService.save(image);
         vacancy.setFileId(file.getId());
+        vacancy.setCreationDate(LocalDateTime.now());
         return vacancyRepository.save(vacancy);
     }
 
