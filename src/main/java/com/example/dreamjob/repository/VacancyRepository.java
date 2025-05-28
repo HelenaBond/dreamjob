@@ -15,8 +15,5 @@ public interface VacancyRepository {
 
     Optional<Vacancy> findById(int id);
 
-    boolean existsById(int id);
-
     Collection<Vacancy> findAll();
-
 }

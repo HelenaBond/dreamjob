@@ -14,7 +14,5 @@ public interface CandidateService {
 
     Candidate findById(int id);
 
-    void existsById(int id);
-
     Collection<Candidate> findAll();
 }

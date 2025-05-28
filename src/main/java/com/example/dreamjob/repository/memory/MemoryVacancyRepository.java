@@ -55,7 +55,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
                         oldVacancy.getId(),
                         vacancy.getTitle(),
                         vacancy.getDescription(),
-                        oldVacancy.getCreationDate(),
+                        vacancy.getCreationDate(),
                         vacancy.getVisible(),
                         vacancy.getCityId(),
                         vacancy.getFileId()
@@ -65,11 +65,6 @@ public class MemoryVacancyRepository implements VacancyRepository {
     @Override
     public Optional<Vacancy> findById(int id) {
         return Optional.ofNullable(vacancies.get(id));
-    }
-
-    @Override
-    public boolean existsById(int id) {
-        return vacancies.containsKey(id);
     }
 
     @Override

@@ -36,21 +36,22 @@ public class SimpleCandidateService implements CandidateService {
     @Override
     public void deleteById(int candidateId) {
         Candidate candidate = findById(candidateId);
-        fileService.deleteById(candidate.getFileId());
         candidateRepository.deleteById(candidateId);
+        fileService.deleteById(candidate.getFileId());
     }
 
     @Override
     public void update(Candidate candidate, FileDto image) {
-        existsById(candidate.getId());  /* предпроверка */
+        Candidate oldCandidate = findById(candidate.getId());
         if (image.getContent().length != 0) {
             var file = fileService.save(image);
             var oldFileId = candidate.getFileId();
             fileService.deleteById(oldFileId);
             candidate.setFileId(file.getId());
         }
+        candidate.setCreationDate(oldCandidate.getCreationDate());
         boolean isSaved = candidateRepository.update(candidate);
-        if (!isSaved) { /* компенсация */
+        if (!isSaved) {
             fileService.deleteById(candidate.getFileId());
             throw new DatabaseUpdateException("Не удалось обновить кандидата");
         }
@@ -63,15 +64,6 @@ public class SimpleCandidateService implements CandidateService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(
                                 "Кандидат с указанным идентификатором не найден"));
-    }
-
-    @Override
-    public void existsById(int id) {
-        boolean result = candidateRepository.existsById(id);
-        if (!result) {
-            throw new EntityNotFoundException(
-                    "Кандидат с указанным идентификатором не найден");
-        }
     }
 
     @Override

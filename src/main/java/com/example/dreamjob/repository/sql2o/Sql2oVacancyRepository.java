@@ -79,15 +79,6 @@ public class Sql2oVacancyRepository implements VacancyRepository {
     }
 
     @Override
-    public boolean existsById(int id) {
-        try (var connection = sql2o.open()) {
-            var query = connection.createQuery("SELECT 1 FROM vacancies WHERE id = :id");
-            query.addParameter("id", id);
-            return query.executeAndFetchFirst(Integer.class) != null;
-        }
-    }
-
-    @Override
     public Collection<Vacancy> findAll() {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM vacancies");

@@ -66,15 +66,6 @@ public class SimpleVacancyService implements VacancyService {
     }
 
     @Override
-    public void existsById(int id) {
-        boolean result = vacancyRepository.existsById(id);
-        if (!result) {
-            throw new EntityNotFoundException(
-                    "Вакансия с указанным идентификатором не найдена");
-        }
-    }
-
-    @Override
     public Collection<Vacancy> findAll() {
         return vacancyRepository.findAll();
     }

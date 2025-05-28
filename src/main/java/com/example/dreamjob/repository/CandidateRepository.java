@@ -14,7 +14,5 @@ public interface CandidateRepository {
 
     Optional<Candidate> findById(int id);
 
-    boolean existsById(int id);
-
     Collection<Candidate> findAll();
 }

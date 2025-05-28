@@ -49,7 +49,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
                         candidate.getId(),
                         candidate.getName(),
                         candidate.getDescription(),
-                        oldCandidate.getCreationDate(),
+                        candidate.getCreationDate(),
                         candidate.getCityId(),
                         candidate.getFileId()
                 )) != null;
@@ -58,11 +58,6 @@ public class MemoryCandidateRepository implements CandidateRepository {
     @Override
     public Optional<Candidate> findById(int id) {
         return Optional.ofNullable(candidates.get(id));
-    }
-
-    @Override
-    public boolean existsById(int id) {
-        return candidates.containsKey(id);
     }
 
     @Override
