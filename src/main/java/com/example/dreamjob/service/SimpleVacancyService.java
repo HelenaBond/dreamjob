@@ -35,21 +35,22 @@ public class SimpleVacancyService implements VacancyService {
     @Override
     public void deleteById(int vacancyId) {
         Vacancy vacancy = findById(vacancyId);
-        fileService.deleteById(vacancy.getFileId());
         vacancyRepository.deleteById(vacancyId);
+        fileService.deleteById(vacancy.getFileId());
     }
 
     @Override
     public void update(Vacancy vacancy, FileDto image) {
-        existsById(vacancy.getId()); /* предпроверка */
+        Vacancy oldVacancy = findById(vacancy.getId());
         if (image.getContent().length != 0) {
             var file = fileService.save(image);
             var oldFileId = vacancy.getFileId();
             fileService.deleteById(oldFileId);
             vacancy.setFileId(file.getId());
         }
+        vacancy.setCreationDate(oldVacancy.getCreationDate());
         boolean isSaved = vacancyRepository.update(vacancy);
-        if (!isSaved) { /* компенсация */
+        if (!isSaved) {
             fileService.deleteById(vacancy.getFileId());
             throw new DatabaseUpdateException("Не удалось обновить вакансию");
         }

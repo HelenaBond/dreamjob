@@ -1,6 +1,7 @@
-package com.example.dreamjob.repository;
+package com.example.dreamjob.repository.memory;
 
 import com.example.dreamjob.model.Candidate;
+import com.example.dreamjob.repository.CandidateRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.concurrent.ThreadSafe;

@@ -1,6 +1,7 @@
-package com.example.dreamjob.repository;
+package com.example.dreamjob.repository.memory;
 
 import com.example.dreamjob.model.File;
+import com.example.dreamjob.repository.FileRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
