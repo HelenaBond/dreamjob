@@ -1,7 +1,7 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
-import com.example.dreamjob.exception.DatabaseUpdateException;
+import com.example.dreamjob.exception.UpdateException;
 import com.example.dreamjob.exception.EntityNotFoundException;
 import com.example.dreamjob.model.Candidate;
 import com.example.dreamjob.model.File;
@@ -53,7 +53,7 @@ public class SimpleCandidateService implements CandidateService {
         boolean isSaved = candidateRepository.update(candidate);
         if (!isSaved) {
             fileService.deleteById(candidate.getFileId());
-            throw new DatabaseUpdateException("Не удалось обновить кандидата");
+            throw new UpdateException("Не удалось обновить кандидата");
         }
     }
 

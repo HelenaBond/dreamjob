@@ -1,7 +1,7 @@
 package com.example.dreamjob.service;
 
 import com.example.dreamjob.dto.FileDto;
-import com.example.dreamjob.exception.DatabaseUpdateException;
+import com.example.dreamjob.exception.UpdateException;
 import com.example.dreamjob.exception.EntityNotFoundException;
 import com.example.dreamjob.model.Vacancy;
 import com.example.dreamjob.repository.VacancyRepository;
@@ -52,7 +52,7 @@ public class SimpleVacancyService implements VacancyService {
         boolean isSaved = vacancyRepository.update(vacancy);
         if (!isSaved) {
             fileService.deleteById(vacancy.getFileId());
-            throw new DatabaseUpdateException("Не удалось обновить вакансию");
+            throw new UpdateException("Не удалось обновить вакансию");
         }
     }
 
