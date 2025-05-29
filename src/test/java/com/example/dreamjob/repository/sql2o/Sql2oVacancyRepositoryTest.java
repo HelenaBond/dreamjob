@@ -1,9 +1,7 @@
 package com.example.dreamjob.repository.sql2o;
 
 import com.example.dreamjob.configuration.DatasourceConfiguration;
-import com.example.dreamjob.model.File;
 import com.example.dreamjob.model.Vacancy;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,12 +18,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class Sql2oVacancyRepositoryTest {
     private static Sql2oVacancyRepository sql2oVacancyRepository;
 
-    private static Sql2oFileRepository sql2oFileRepository;
-
-    private static File file;
-
     @BeforeAll
-    public static void initRepositories() throws Exception {
+    public static void initRepository() throws Exception {
         var properties = new Properties();
         try (var inputStream = Sql2oVacancyRepositoryTest.class.getClassLoader().getResourceAsStream("connection.properties")) {
             properties.load(inputStream);
@@ -39,16 +33,6 @@ class Sql2oVacancyRepositoryTest {
         var sql2o = configuration.databaseClient(datasource);
 
         sql2oVacancyRepository = new Sql2oVacancyRepository(sql2o);
-        sql2oFileRepository = new Sql2oFileRepository(sql2o);
-
-        // нужно сохранить хотя бы один файл, т.к. Vacancy от него зависит
-        file = new File("test", "test");
-        sql2oFileRepository.save(file);
-    }
-
-    @AfterAll
-    public static void deleteFile() {
-        sql2oFileRepository.deleteById(file.getId());
     }
 
     @AfterEach
@@ -62,7 +46,7 @@ class Sql2oVacancyRepositoryTest {
     @Test
     public void whenSaveThenGetSame() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
+        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, 1));
         var savedVacancy = sql2oVacancyRepository.findById(vacancy.getId()).get();
         assertThat(savedVacancy).usingRecursiveComparison().isEqualTo(vacancy);
     }
@@ -70,9 +54,9 @@ class Sql2oVacancyRepositoryTest {
     @Test
     public void whenSaveSeveralThenGetAll() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy1 = sql2oVacancyRepository.save(new Vacancy(0, "title1", "description1", creationDate, true, 1, file.getId()));
-        var vacancy2 = sql2oVacancyRepository.save(new Vacancy(0, "title2", "description2", creationDate, false, 1, file.getId()));
-        var vacancy3 = sql2oVacancyRepository.save(new Vacancy(0, "title3", "description3", creationDate, true, 1, file.getId()));
+        var vacancy1 = sql2oVacancyRepository.save(new Vacancy(0, "title1", "description1", creationDate, true, 1, 1));
+        var vacancy2 = sql2oVacancyRepository.save(new Vacancy(0, "title2", "description2", creationDate, false, 1, 1));
+        var vacancy3 = sql2oVacancyRepository.save(new Vacancy(0, "title3", "description3", creationDate, true, 1, 1));
         var result = sql2oVacancyRepository.findAll();
         assertThat(result).isEqualTo(List.of(vacancy1, vacancy2, vacancy3));
     }
@@ -86,7 +70,7 @@ class Sql2oVacancyRepositoryTest {
     @Test
     public void whenDeleteThenGetEmptyOptional() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
+        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, 1));
         sql2oVacancyRepository.deleteById(vacancy.getId());
         var savedVacancy = sql2oVacancyRepository.findById(vacancy.getId());
         assertThat(savedVacancy).isEqualTo(empty());
@@ -95,10 +79,10 @@ class Sql2oVacancyRepositoryTest {
     @Test
     public void whenUpdateThenGetUpdated() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
+        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, 1));
         var updatedVacancy = new Vacancy(
                 vacancy.getId(), "new title", "new description", creationDate.plusDays(1),
-                !vacancy.getVisible(), 1, file.getId()
+                !vacancy.getVisible(), 1, 1
         );
         var isUpdated = sql2oVacancyRepository.update(updatedVacancy);
         var savedVacancy = sql2oVacancyRepository.findById(updatedVacancy.getId()).get();
@@ -109,7 +93,7 @@ class Sql2oVacancyRepositoryTest {
     @Test
     public void whenUpdateUnExistingVacancyThenGetFalse() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = new Vacancy(0, "title", "description", creationDate, true, 1, file.getId());
+        var vacancy = new Vacancy(0, "title", "description", creationDate, true, 1, 1);
         var isUpdated = sql2oVacancyRepository.update(vacancy);
         assertThat(isUpdated).isFalse();
     }

@@ -1,0 +1,1 @@
+insert into files(name, path) values('test', 'test');
