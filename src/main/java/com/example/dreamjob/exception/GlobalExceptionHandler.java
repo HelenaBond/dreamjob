@@ -18,9 +18,9 @@ public class GlobalExceptionHandler {
         return "errors/404";
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(StorageException.class)
-    public String storageUnavailable(StorageException ex, Model model) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public String uniqueConstraint(EntityAlreadyExistsException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
         return "errors/404";
     }
@@ -33,8 +33,15 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(DatabaseUpdateException.class)
-    public String databaseNotUpdate(DatabaseUpdateException ex, Model model) {
+    @ExceptionHandler(UpdateException.class)
+    public String databaseNotUpdate(UpdateException ex, Model model) {
+        model.addAttribute("message", ex.getMessage());
+        return "errors/404";
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(StorageException.class)
+    public String storageUnavailable(StorageException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
         return "errors/404";
     }
