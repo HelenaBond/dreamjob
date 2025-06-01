@@ -25,6 +25,13 @@ public class GlobalExceptionHandler {
         return "errors/404";
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserValidationException.class)
+    public String userValidation(UserValidationException ex, Model model) {
+        model.addAttribute("error", ex.getMessage());
+        return "users/login";
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
     public String entityNotFound(EntityNotFoundException ex, Model model) {

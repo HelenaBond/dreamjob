@@ -1,5 +1,6 @@
 package com.example.dreamjob.controller;
 
+import com.example.dreamjob.dto.UserDto;
 import com.example.dreamjob.model.User;
 import com.example.dreamjob.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -27,5 +28,16 @@ public class UserController {
     public String register(@ModelAttribute User user) {
         userService.save(user);
         return "redirect:/index";
+    }
+
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "users/login";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@ModelAttribute UserDto user) {
+        userService.findByEmailAndPassword(user);
+        return "redirect:/vacancies";
     }
 }

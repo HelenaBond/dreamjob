@@ -1,9 +1,13 @@
 package com.example.dreamjob.service;
 
+import com.example.dreamjob.dto.UserDto;
 import com.example.dreamjob.exception.EntityAlreadyExistsException;
+import com.example.dreamjob.exception.UserValidationException;
 import com.example.dreamjob.model.User;
 import com.example.dreamjob.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class SimpleUserService implements UserService {
@@ -21,5 +25,13 @@ public class SimpleUserService implements UserService {
                     "Пользователь с почтой %s уже существует".formatted(user.getEmail()));
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public void findByEmailAndPassword(UserDto dto) {
+        Optional<User> user = userRepository.findByEmailAndPassword(dto.email(), dto.password());
+        if (user.isEmpty()) {
+            throw new UserValidationException("Почта или пароль введены неверно");
+        }
     }
 }
