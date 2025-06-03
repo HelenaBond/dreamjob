@@ -28,10 +28,11 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public void findByEmailAndPassword(UserDto dto) {
+    public User findByEmailAndPassword(UserDto dto) {
         Optional<User> user = userRepository.findByEmailAndPassword(dto.email(), dto.password());
         if (user.isEmpty()) {
             throw new UserValidationException("Почта или пароль введены неверно");
         }
+        return user.get();
     }
 }
