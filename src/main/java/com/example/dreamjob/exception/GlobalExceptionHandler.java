@@ -15,14 +15,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileLoadException.class)
     public String fileNotLoad(FileLoadException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
-        return "errors/404";
+        return "error/404";
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public String uniqueConstraint(EntityAlreadyExistsException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
-        return "errors/404";
+        return "error/404";
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -32,25 +32,18 @@ public class GlobalExceptionHandler {
         return "users/login";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(EntityNotFoundException.class)
-    public String entityNotFound(EntityNotFoundException ex, Model model) {
-        model.addAttribute("message", ex.getMessage());
-        return "errors/404";
-    }
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(UpdateException.class)
     public String databaseNotUpdate(UpdateException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
-        return "errors/404";
+        return "error/404";
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(StorageException.class)
     public String storageUnavailable(StorageException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
-        return "errors/404";
+        return "error/404";
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -58,6 +51,6 @@ public class GlobalExceptionHandler {
     public String unexpected(Exception ex, Model model) {
         log.error("Необработанное исключение", ex);
         model.addAttribute("message", "Неожиданная ошибка. Обратитесь в техподдержку");
-        return "errors/404";
+        return "error/404";
     }
 }
