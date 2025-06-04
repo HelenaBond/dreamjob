@@ -21,7 +21,7 @@ public class SimpleUserService implements UserService {
     @Override
     public void save(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException(
+            throw new UserValidationException(
                     "Пользователь с почтой %s уже существует".formatted(user.getEmail()));
         }
         userRepository.save(user);
